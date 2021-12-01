@@ -10,7 +10,6 @@ import {
   RedirectToSignIn,
 } from "@clerk/nextjs";
 
-
 type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode;
 };
@@ -21,12 +20,14 @@ type AppPropsWithLayout = AppProps & {
 
 const publicPages: string[] = ["/"];
 
+const clerkFrontendApi = process.env.NEXT_PUBLIC_CLERK_FRONTEND_API;
+
 function MyApp({ Component, pageProps }: AppPropsWithLayout): JSX.Element {
   const getLayout = Component.getLayout ?? ((page) => page);
   const { pathname } = useRouter();
   const isPublicPage = publicPages.includes(pathname);
   return (
-    <ClerkProvider>
+    <ClerkProvider frontendApi={clerkFrontendApi}>
       {isPublicPage ? (
         getLayout(<Component {...pageProps} />)
       ) : (
